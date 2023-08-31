@@ -16,7 +16,11 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user_data", schema = "public", catalog = "habrdb")
+@Table(name = "user_data", schema = "public", catalog = "habrdb",
+        uniqueConstraints =
+        {@UniqueConstraint(name = "uniqueEmail", columnNames = "email"),
+                @UniqueConstraint(name = "uniqueLogin", columnNames = "user_name")}
+)
 public class UserData extends GenericModel{
 
     @Column(name = "email",nullable = false)
