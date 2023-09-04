@@ -1,7 +1,9 @@
 package ru.javabegin.backend.todo.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,8 +26,8 @@ import java.util.List;
 @AllArgsConstructor
 @Setter
 @Getter
-@SequenceGenerator(name = "default_gen", sequenceName = "users_seq", allocationSize = 1)
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+
+@JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property = "@json_id")
 public class Category extends GenericModel {
 
     @Column(name = "title",nullable = false)
@@ -38,12 +40,12 @@ public class Category extends GenericModel {
     private Long uncompletedCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonProperty(required = true,access = JsonProperty.Access.WRITE_ONLY)
     @JoinColumn(name = "user_data_id", nullable = false,
     foreignKey = @ForeignKey(name = "FK_CATEGORY_USER_DATE")) // по каким полям связаны эти 2 объекта (foreign key)
     private UserData userData;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Task> taskList;
-
 
 }

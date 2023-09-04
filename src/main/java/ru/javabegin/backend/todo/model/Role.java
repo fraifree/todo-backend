@@ -19,15 +19,14 @@ import java.util.Set;
 @Setter
 @Getter
 @ToString
-@SequenceGenerator(name = "default_gen", sequenceName = "users_seq", allocationSize = 1)
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property = "@json_id")
 public class Role extends GenericModel {
 
 	private String name; // название роли
 
 
-	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},fetch = FetchType.EAGER)
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(name = "users_roles",
 			joinColumns = @JoinColumn(name = "role_id"),
 			foreignKey = @ForeignKey(name = "FK_ROLES_USERS"),

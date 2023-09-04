@@ -22,8 +22,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Setter
 @Getter
-@SequenceGenerator(name = "default_gen", sequenceName = "users_seq", allocationSize = 1)
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+
+@JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property = "@json_id")
 
 public class Stat extends GenericModel{ // в этой таблице всего 1 запись, которая обновляется (но никогда не удаляется)
 

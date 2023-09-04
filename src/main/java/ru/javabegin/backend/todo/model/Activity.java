@@ -1,5 +1,7 @@
 package ru.javabegin.backend.todo.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,6 +18,7 @@ import lombok.Setter;
 @Setter
 @Getter
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property = "@json_id")
 public class Activity extends GenericModel { // название таблицы будет браться автоматически по названию класса с маленькой буквы: activity
 
     @Column(name = "activated")

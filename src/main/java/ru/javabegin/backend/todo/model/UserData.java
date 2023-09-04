@@ -1,6 +1,8 @@
 package ru.javabegin.backend.todo.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,11 +18,14 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user_data", schema = "public", catalog = "habrdb",
-        uniqueConstraints =
-        {@UniqueConstraint(name = "uniqueEmail", columnNames = "email"),
-                @UniqueConstraint(name = "uniqueLogin", columnNames = "user_name")}
+@Table(name = "user_data"
+//        ,
+//        uniqueConstraints =
+//        {@UniqueConstraint(name = "uniqueEmail", columnNames = "email"),
+//                @UniqueConstraint(name = "uniqueLogin", columnNames = "user_name")}
 )
+
+@JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property = "@json_id")
 public class UserData extends GenericModel{
 
     @Column(name = "email",nullable = false)
@@ -40,13 +45,13 @@ public class UserData extends GenericModel{
             inverseForeignKey = @ForeignKey(name = "FK_ROLES_USERS"))
     private Set<Role> roles;
 
-    @OneToMany(mappedBy = "userData")
+    @OneToMany(mappedBy = "userData", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Category> categoryList;
 
-    @OneToMany(mappedBy = "userData")
+    @OneToMany(mappedBy = "userData", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Priority> priorityList;
 
-    @OneToMany(mappedBy = "userData")
+    @OneToMany(mappedBy = "userData", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Task> taskList;
 
 }

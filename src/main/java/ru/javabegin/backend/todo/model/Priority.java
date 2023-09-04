@@ -1,6 +1,7 @@
 package ru.javabegin.backend.todo.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,19 +25,20 @@ import java.util.List;
 @AllArgsConstructor
 @Setter
 @Getter
-@SequenceGenerator(name = "default_gen", sequenceName = "users_seq", allocationSize = 1)
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+
+@JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property = "@json_id")
 public class Priority extends GenericModel {
     @Column(name = "title",nullable = false)
     private String title;
     @Column(name = "color",nullable = false)
     private String color;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_data_id", referencedColumnName = "id") // по каким полям связывать (foreign key)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JoinColumn(name = "user_data_id", foreignKey = @ForeignKey(name = "FK_PRIORITY_USER_DATA")) // по каким полям связывать (foreign key)
     private UserData userData;
 
-    @OneToMany(mappedBy = "priority")
+    @OneToMany(mappedBy = "priority", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Task> taskList;
 
 }
