@@ -34,7 +34,7 @@ public class Priority extends GenericModel {
     private String color;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @JoinColumn(name = "user_data_id", foreignKey = @ForeignKey(name = "FK_PRIORITY_USER_DATA")) // по каким полям связывать (foreign key)
     private UserData userData;
 

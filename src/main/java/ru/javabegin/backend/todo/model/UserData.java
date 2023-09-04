@@ -19,23 +19,23 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "user_data"
-//        ,
-//        uniqueConstraints =
-//        {@UniqueConstraint(name = "uniqueEmail", columnNames = "email"),
-//                @UniqueConstraint(name = "uniqueLogin", columnNames = "user_name")}
+        ,
+        uniqueConstraints =
+        {@UniqueConstraint(name = "uniqueEmail", columnNames = "email"),
+                @UniqueConstraint(name = "uniqueLogin", columnNames = "name")}
 )
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property = "@json_id")
 public class UserData extends GenericModel{
 
-    @Column(name = "email",nullable = false)
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "user_name",nullable = false)
-    private String userName;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    @Column(name = "user_password", nullable = false)
-    private String userPassword;
+    @Column(name = "password", nullable = false)
+    private String password;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",

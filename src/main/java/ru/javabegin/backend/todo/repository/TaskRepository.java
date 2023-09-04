@@ -8,5 +8,5 @@ import java.util.List;
 @Repository
 public interface TaskRepository extends GenericRepository<Task>{
 
-    List<Task> findByUserDataUserNameOrderByTitleAsc(String userName);
+    List<Task> findByUserDataNameOrderByTitleAsc(String userName);
 }

@@ -28,7 +28,9 @@ public class CategoryService {
     }
 
     public List<Category> findAll(String email){
+        System.out.println("sout" + categoryRepository.findByUserDataEmailOrderByTitleAsc(email).get(0).getUserData().getCategoryList().get(0).getTitle());
         return categoryRepository.findByUserDataEmailOrderByTitleAsc(email);
+
     }
 
     public Category add(Category category) {
