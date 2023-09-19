@@ -6,3 +6,7 @@ INSERT INTO task values (1,false,now(),'Task',1,2,1);
 
 INSERT INTO priority values (1,'Red','Alarm',1),
                             (2,'Green','Medium',1);
+
+INSERT INTO role values (1,'user');
+
+INSERT INTO task values (3,false,now(),'Task3');

@@ -28,7 +28,7 @@ import java.util.Date;
 
 public class Task extends GenericModel{
 
-    @Column(name = "title")
+    @Column(name = "title",nullable = false)
     private String title;
 
     @Column(name = "completed")
@@ -48,7 +48,6 @@ public class Task extends GenericModel{
 //    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @JoinColumn(name = "category_id", foreignKey = @ForeignKey(name = "FK_TASK_CATEGORY")) // по каким полям связывать (foreign key)
     private Category category;
-
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 //    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

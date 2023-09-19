@@ -16,7 +16,7 @@ public abstract class GenericService <T extends GenericModel>{
     }
 
     //Получить информацию по ID
-    public GenericModel findById(Long id){
+    public T findById(Long id){
         return genericRepository.getReferenceById(id);
     }
 
@@ -24,12 +24,12 @@ public abstract class GenericService <T extends GenericModel>{
         return genericRepository.findAll();
     }
 
-    public GenericModel create(T newEntity){
+    public T create(T newEntity){
         return genericRepository.save(newEntity);
     }
 
-    public void update(T entity){
-        genericRepository.save(entity);
+    public T update(T entity){
+        return genericRepository.save(entity);
     }
 
     public void delete(Long id){

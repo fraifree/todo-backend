@@ -4,8 +4,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.javabegin.backend.todo.model.Category;
+import ru.javabegin.backend.todo.model.Task;
+import ru.javabegin.backend.todo.model.UserData;
 import ru.javabegin.backend.todo.search.CategorySearchValues;
 import ru.javabegin.backend.todo.service.CategoryService;
+import ru.javabegin.backend.todo.service.TaskService;
+import ru.javabegin.backend.todo.service.UserDataService;
 
 import java.util.List;
 
@@ -14,77 +18,52 @@ import java.util.List;
 public class CategoryRestController extends GenericRestController<Category>{
     // доступ к данным ДБ
     private final CategoryService categoryService;
+    private final UserDataService userDataService;
 
-    public CategoryRestController(CategoryService categoryService) {
+    private final TaskService taskService;
+
+
+    public CategoryRestController(CategoryService categoryService,
+                                  UserDataService userDataService,
+                                  TaskService taskService) {
         super(categoryService);
         this.categoryService = categoryService;
+        this.userDataService = userDataService;
+        this.taskService = taskService;
     }
 
-//    @GetMapping("/id")
-//    public Category findById() { return categoryService.findById(4L);}
 
-//    @PostMapping("/all")
-//    public List<Category> findAll () {
-//        return categoryService.findAll();
-//    }
     @PostMapping("/title")
     public ResponseEntity<Category> findByTitle(@RequestBody String title){
         return ResponseEntity.ok(categoryService.findAllByTitle(title));
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<Category> add(@RequestBody Category category){
-        //проверка на обязательные параметры
-        if (category.getId() != null && category.getId() != 0) // если id заполнено, то значит это не новая категория
-        {
-          //id создается автоматически в БД (autoincrement), по этому его передавать не нужно, может быть ошибка
-            return new ResponseEntity("redundant param: id MUST be null", HttpStatus.NOT_ACCEPTABLE);
-        }
-        // если передали пустое значение title
-        if (category.getTitle() == null && category.getTitle().trim().length() == 0){
-            return new ResponseEntity("missed param: title", HttpStatus.NOT_ACCEPTABLE);
-        }
-        return ResponseEntity.ok(categoryService.add(category));
+    @PostMapping("/addUser")
+    public ResponseEntity<Category> addUser(@RequestParam(value = "categoryId")Long categoryId,
+                                            @RequestParam(value = "userDataId")Long userDataId){
+        Category category = categoryService.findById(categoryId);
+        UserData userData = userDataService.findById(userDataId);
+        category.setUserData(userData);
+        return ResponseEntity.status(HttpStatus.OK).body(categoryService.update(category));
     }
 
-    @PutMapping("/update")
-    public ResponseEntity update(@RequestBody Category category) {
-
-        // проверка на обязательные параметры
-        if (category.getId() == null || category.getId() == 0) {
-            return new ResponseEntity("missed param: id", HttpStatus.NOT_ACCEPTABLE);
-        }
-
-        // если передали пустое значение title
-        if (category.getTitle() == null || category.getTitle().trim().length() == 0) {
-            return new ResponseEntity("missed param: title", HttpStatus.NOT_ACCEPTABLE);
-        }
-
-        // save работает как на добавление, так и на обновление
-        categoryService.update(category);
-
-        return new ResponseEntity(HttpStatus.OK); // просто отправляем статус 200 (операция прошла успешно)
+    @PostMapping("/addTask")
+    public ResponseEntity<Category> addTask(@RequestParam(value = "categoryId")Long categoryId,
+                                            @RequestParam(value = "taskId")Long taskId){
+        Category category = categoryService.findById(categoryId);
+        Task task = taskService.findById(taskId);
+//        category.getTaskList().add(task);
+        task.setCategory(category);
+        return ResponseEntity.status(HttpStatus.OK).body(categoryService.update(category));
     }
 
-//    @DeleteMapping("/delete/{id}")
-//    public ResponseEntity delete(@PathVariable("id") Long id){
-//        //можно обойтись и без try/catch, тогда будет возвращаться полная ошибка(stacktrace)
-//        //тут показан пример, как можно обрабатывать исключение и отправить свой текст/статус
-//        try {
-//            categoryService.delete(id);
-//        } catch (EmptyResultDataAccessException e) {
-//            e.printStackTrace();
-//            return new ResponseEntity("id = " + id + " not found", HttpStatus.NOT_ACCEPTABLE);
-//        }
-//        return new ResponseEntity(HttpStatus.OK);
-//    }
 
     // поиск по любым параметрам CategorySearchValues
     @PostMapping("/search")
     public ResponseEntity<List<Category>> search(@RequestBody CategorySearchValues categorySearchValues) {
 
         // проверка на обязательные параметры
-        if (categorySearchValues.getEmail() == null || categorySearchValues.getEmail().trim().length() == 0) {
+        if (categorySearchValues.getEmail() == null || categorySearchValues.getEmail().trim().isEmpty()) {
             return new ResponseEntity("missed param: email", HttpStatus.NOT_ACCEPTABLE);
         }
 
@@ -94,15 +73,4 @@ public class CategoryRestController extends GenericRestController<Category>{
         return ResponseEntity.ok(list);
     }
 
-//    @PostMapping("/id")
-//    public ResponseEntity<Category> findById(@RequestBody Long id) {
-//        Category category = null;
-//        try {
-//            category = categoryService.findById(id);
-//        } catch (NoSuchElementException e) {//если объект не будет найден
-//            e.printStackTrace();
-//            return new ResponseEntity("id=" + id + " not found", HttpStatus.NOT_ACCEPTABLE);
-//        }
-//        return ResponseEntity.ok(category);
-//    }
 }
