@@ -9,15 +9,15 @@ import java.util.Optional;
 
 @Service
 public abstract class GenericService <T extends GenericModel>{
-    private GenericRepository<T> genericRepository;
+    private final GenericRepository<T> genericRepository;
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     protected GenericService(GenericRepository<T> genericRepository) {
         this.genericRepository = genericRepository;
     }
 
     //Получить информацию по ID
-    public Optional<T> getById(Long id){
-        return genericRepository.findById(id);
+    public GenericModel findById(Long id){
+        return genericRepository.getReferenceById(id);
     }
 
     public List<T> getAll(){
@@ -28,13 +28,14 @@ public abstract class GenericService <T extends GenericModel>{
         return genericRepository.save(newEntity);
     }
 
-    public GenericModel update(T entity){
-        return genericRepository.save(entity);
+    public void update(T entity){
+        genericRepository.save(entity);
     }
 
-    void delete(Long id){
+    public void delete(Long id){
         genericRepository.deleteById(id);
     }
+
 
 
 }

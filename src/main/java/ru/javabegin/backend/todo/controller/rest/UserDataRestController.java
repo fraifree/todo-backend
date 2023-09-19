@@ -1,21 +1,19 @@
-package ru.javabegin.backend.todo.controller;
+package ru.javabegin.backend.todo.controller.rest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.javabegin.backend.todo.model.UserData;
 import ru.javabegin.backend.todo.service.UserDataService;
 
 @RestController
 @RequestMapping("/user")
-public class UserDataController {
+public class UserDataRestController extends GenericRestController<UserData>{
 
     private final UserDataService userDataService;
 
-    public UserDataController(UserDataService userDataService) {
+    public UserDataRestController(UserDataService userDataService) {
+        super(userDataService);
         this.userDataService = userDataService;
     }
 
@@ -35,4 +33,9 @@ public class UserDataController {
         }
         return ResponseEntity.ok((UserData) userDataService.create(userData));
     }
+
+//    @GetMapping("/id")
+//    public Optional<UserData> findById(Long id){
+//        return userDataService.getById(id);
+//    }
 }
