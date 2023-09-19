@@ -14,7 +14,7 @@ import java.util.List;
 public abstract class GenericRestController<T extends GenericModel> {
     private final GenericService<T> genericService;
 
-//    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     protected GenericRestController(GenericService<T> genericService) {
         this.genericService = genericService;
     }
