@@ -1,5 +1,6 @@
 package ru.javabegin.backend.todo.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import ru.javabegin.backend.todo.model.GenericModel;
 import ru.javabegin.backend.todo.repository.GenericRepository;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public abstract class GenericService <T extends GenericModel>{
     private final GenericRepository<T> genericRepository;
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
